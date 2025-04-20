@@ -6,6 +6,8 @@ app_name = "interviews"
 urlpatterns = [
     path("", views.index, name = "index"),
     path("add", views.add, name = "add"),
+    path("<int:id>", views.show, name = "show"),
     path("<int:id>/update", views.update, name = "update"),
     path("<int:id>/delete", views.delete, name = "delete"),
+    path("<int:id>/comment", views.comment, name = "comment")
 ]

@@ -1,0 +1,7 @@
+<h1>更新</h1>
+
+<form action="{% url 'interviews:update' interview.id %}" method="post" onsubmit="return confirm('確定要更新？')">
+    {% csrf_token %}
+    {{ form }}
+    <button>更新</button>
+</form>

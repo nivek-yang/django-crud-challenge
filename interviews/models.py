@@ -1,5 +1,7 @@
 from django.db import models
 
+
+
 # Create your models here.
 class Interview(models.Model):
     company_name = models.CharField(max_length=100)
@@ -9,5 +11,8 @@ class Interview(models.Model):
     review = models.TextField()
     result = models.CharField()
 
-    
+class Comment(models.Model):
+    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateField(auto_now_add=True)
     

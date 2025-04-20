@@ -1,3 +1,17 @@
 <h1>面試列表</h1>
 
-<a href="{% url 'interviews:update' %}">新增</a>
+<a href="{% url 'interviews:add' %}">新增</a>
+
+<ul>
+    {% for interview in interviews %}
+    
+        <li>
+                <a href="{% url 'interviews:show' interview.id %}">
+                    <h3>{{ interview.company_name }}</h3>
+                    <h3>{{ interview.position }}</h3>
+                    <h3>{{ interview.rating }}</h3>
+                </a>
+        </li>
+
+    {% endfor %}
+</ul>

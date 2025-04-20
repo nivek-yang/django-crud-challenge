@@ -1,0 +1,8 @@
+<h1>新增</h1>
+
+<form action="{% url 'interviews:add' %}" method="post" onsubmit="return confirm('確定要新增？')">
+    {% csrf_token %}
+    {{ form }}
+    <button>新增</button>
+
+</form>
