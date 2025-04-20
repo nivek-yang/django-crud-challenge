@@ -7,9 +7,9 @@
     
         <li>
                 <a href="{% url 'interviews:show' interview.id %}">
-                    <h3>{{ interview.company_name }}</h3>
-                    <h3>{{ interview.position }}</h3>
-                    <h3>{{ interview.rating }}</h3>
+                    <h3>公司名稱：{{ interview.company_name }}</h3>
+                    <h3>職位：{{ interview.position }}</h3>
+                    <h3>評分：{{ interview.rating }}/10</h3>
                 </a>
         </li>
 
