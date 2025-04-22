@@ -19,12 +19,19 @@ archive:
 	# 建立目標資料夾
 	mkdir -p $(name)
 
-	# 從分支中取得檔案清單，排除 Makefile 和 .gitignore
-	FILES=$$(git ls-tree --name-only $(name) | grep -vE '^(Makefile|\.gitignore)$$'); \
+	# 從目標分支 checkout 所有檔案（包含 Makefile、.gitignore）
+	git checkout $(name) -- .
+
+	# 移動除了 .git 目錄以外的所有檔案到 $(name) 資料夾
+	FILES=$$(git ls-tree --name-only $(name)); \
 	for file in $$FILES; do \
-		git checkout $(name) -- "$$file"; \
-		git mv "$$file" $(name)/; \
+		if [ "$$file" != "." ] && [ "$$file" != ".." ]; then \
+			git mv "$$file" $(name)/; \
+		fi \
 	done
+
+	# 從資料夾中把 master 的 Makefile 和 .gitignore 複製回來（避免被 challenge 蓋掉）
+	git checkout origin/master -- Makefile .gitignore
 
 	# 提交並推送
 	git add .
@@ -32,5 +39,3 @@ archive:
 	git push origin master
 
 	@echo "✅ Done archiving $(name) → master:$(name)/"
-
-
