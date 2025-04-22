@@ -20,8 +20,9 @@ def add(req):
 
 def show(req, id):
     interview = get_object_or_404(Interview, pk=id)
+    comments = interview.comment_set.order_by("-id")
     
-    return render(req, "interviews/show.html", {"interview": interview })
+    return render(req, "interviews/show.html", {"interview": interview, "comments": comments })
 
 def update(req, id):
     interview = get_object_or_404(Interview, pk=id)
@@ -40,5 +41,11 @@ def delete(req, id):
 
     return redirect("interviews:index")
 
+def comment(req, id):
+    
+    interview = get_object_or_404(Interview, pk=id)
+    comment = interview.comment_set.create(content = req.POST['content'])
+
+    return redirect("interviews:show", id=id)
 
         
