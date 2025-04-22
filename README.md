@@ -48,9 +48,9 @@ git push -u origin master
 
 ---
 
-## 🚀 建立 Makefile 自動遷移腳本
+## 🚀 建立 Makefile 自動遷移腳本（使用 git archive）
 
-在新的 `master` 分支根目錄建立 `Makefile`：
+在 `master` 分支的根目錄建立 `Makefile`：
 
 ```makefile
 .PHONY: archive
@@ -63,44 +63,32 @@ archive:
 	@echo "📦 Archiving branch $(name) into folder $(name)/ in master..."
 
 	# 確保在 master 分支
-	git checkout master
+	@git rev-parse --abbrev-ref HEAD | grep -q '^master$$' || \
+	  (echo "❌ Please switch to master branch first." && exit 1)
 
-	# 檢查是否有未提交變更
+	# 確保沒有未提交變更
 	@if [ -n "$$(git status --porcelain)" ]; then \
-		echo "❌ master branch has uncommitted changes. Please commit or stash first."; \
+		echo "❌ Uncommitted changes in master. Please commit or stash first."; \
 		exit 1; \
 	fi
 
 	# 建立目標資料夾
-	mkdir -p $(name)
+	@mkdir -p $(name)
 
-	# 備份 master 根目錄的 .gitignore 和 Makefile（避免被覆蓋）
-	cp .gitignore .gitignore.master.bak || true
-	cp Makefile Makefile.master.bak || true
+	# 使用 git archive 將分支壓縮並解壓至對應資料夾
+	@git archive $(name) | tar -x -C $(name)
 
-	# 從分支中檢出所有檔案
-	FILES=$$(git ls-tree --name-only $(name)); \
-	for file in $$FILES; do \
-		git checkout $(name) -- "$$file"; \
-		git mv "$$file" $(name)/; \
-	done
-
-	# 還原 master 的 .gitignore 和 Makefile
-	mv .gitignore.master.bak .gitignore
-	mv Makefile.master.bak Makefile
-
-	# 提交並推送
-	git add .
-	git commit -m "Archive $(name) into $(name)/"
-	git push origin master
+	# 加入並提交更動
+	@git add $(name)
+	@git commit -m "Archive $(name) into $(name)/"
+	@git push origin master
 
 	@echo "✅ Done archiving $(name) → master:$(name)/"
 ```
 
-
 ---
 
-## 📦 遷移挑戰分支內容
+## 📦 歸檔挑戰分支內容
 
 每完成一個 `challenge_<n>` 分支的專案後，執行：
 
@@ -108,11 +96,11 @@ archive:
 make archive name=challenge_<n>
 ```
 
-系統會自動將該分支所有檔案移動到 `master` 的 `challenge_<n>/` 資料夾中，並保留 `master` 自己的 `.gitignore` 和 `Makefile`。
+系統會自動將該分支所有檔案打包後解壓到 `master` 的 `challenge_<n>/` 資料夾中。
 
 ---
 
-## ✅ 效果展示
+## ✅ 結果展示
 
 ```
 master

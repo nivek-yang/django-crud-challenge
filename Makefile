@@ -6,6 +6,7 @@ $(error Usage: make archive name=challenge-<X>)
 endif
 
 # 使用 git archive 方法歸檔
+# 比較好，根目錄的 Makefile, .gitignore, README.md 不會先被刪除再生成
 archive-archive:
 	@echo "📦 Archiving branch $(name) using git-archive into folder $(name)/ in master..."
 	@echo "🔀 Switching to master branch..."
