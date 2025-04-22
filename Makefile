@@ -23,7 +23,6 @@ archive:
 	# 建立目標資料夾
 	mkdir -p $(name)
 
-	# 從指定分支取得檔案（排除 Makefile 和 .gitignore）
 	FILES=$$(git ls-tree --name-only $(name)); \
 	for file in $$FILES; do \
 		git checkout $(name) -- "$$file"; \
