@@ -1,0 +1,9 @@
+<h1>新增</h1>
+
+<form action="{% url 'interviews:add' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button>新增</button>
+</form>
+
+<a href="{% url 'interviews:index' %}">返回上一頁</a>
