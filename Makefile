@@ -10,28 +10,29 @@ archive:
 	# 確保在 master 分支
 	git checkout master
 
-	# 檢查是否有未提交變更
+	# 確保沒有未提交變更
 	@if [ -n "$$(git status --porcelain)" ]; then \
 		echo "❌ master branch has uncommitted changes. Please commit or stash first."; \
 		exit 1; \
 	fi
 
+	# 備份 master 的 Makefile 和 .gitignore
+	cp Makefile .Makefile.bak || true
+	cp .gitignore .gitignore.bak || true
+
 	# 建立目標資料夾
 	mkdir -p $(name)
 
-	# 從目標分支 checkout 所有檔案（包含 Makefile、.gitignore）
-	git checkout $(name) -- .
-
-	# 移動除了 .git 目錄以外的所有檔案到 $(name) 資料夾
-	FILES=$$(git ls-tree --name-only $(name)); \
+	# 從指定分支取得檔案（排除 Makefile 和 .gitignore）
+	FILES=$$(git ls-tree --name-only $(name) | grep -vE '^(Makefile|\.gitignore)$$'); \
 	for file in $$FILES; do \
-		if [ "$$file" != "." ] && [ "$$file" != ".." ]; then \
-			git mv "$$file" $(name)/; \
-		fi \
+		git checkout $(name) -- "$$file"; \
+		git mv "$$file" $(name)/; \
 	done
 
-	# 從資料夾中把 master 的 Makefile 和 .gitignore 複製回來（避免被 challenge 蓋掉）
-	git checkout origin/master -- Makefile .gitignore
+	# 還原 master 的 Makefile 和 .gitignore
+	mv .Makefile.bak Makefile || true
+	mv .gitignore.bak .gitignore || true
 
 	# 提交並推送
 	git add .
