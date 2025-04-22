@@ -3,6 +3,12 @@ from .models import Interview
 from .forms import InterviewForm
 
 # Create your views here.
+def index(req):
+    
+    interviews = Interview.objects.order_by("-id")
+    return render(req, "interviews/index.html", {"interviews": interviews})
+
+
 def add(req):
     if req.method == "POST":
         form = InterviewForm(req.POST)
@@ -11,3 +17,8 @@ def add(req):
 
     form = InterviewForm
     return render(req, "interviews/add.html", {"form": form})
+
+def show(req, id):
+    interview = get_object_or_404(Interview, pk=id)
+    return render(req, "interviews/show.html", {"interview": interview})
+                  
