@@ -1,6 +1,8 @@
 {
     "project": {
-        "start_time": "2025-04-22 10:44:58"
+        "start_time": "2025-04-22 10:44:58",
+        "end_time": "2025-04-22 11:25:53",
+        "duration": "0:40:55"
     },
     "features": {
         "Settings": {
