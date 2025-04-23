@@ -25,7 +25,7 @@ archive:
 # 對所有符合 challenge-* 的分支執行 subtree 匯入
 archive-all:
 	@git fetch origin
-	@git branch -r | grep 'origin/challenge-' | sed 's|origin/||' | while read branch; do \
-		make archive name=$$branch; \
+	@git branch -r | grep 'origin/challenge_' | sed 's|origin/||' | while read branch; do \
+		$(MAKE) archive name=$$branch; \
 	done
 
