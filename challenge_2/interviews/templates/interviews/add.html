@@ -1,9 +1,0 @@
-<h1>新增面試</h1>
-
-<a href="{% url 'interviews:index' %}">回上一頁</a>
-
-<form action="{% url 'interviews:add' %}" method="post" onsubmit="return confirm('確定要新增？')">
-    {% csrf_token %}
-    {{ form }}
-    <button>新增</button>
-</form>
